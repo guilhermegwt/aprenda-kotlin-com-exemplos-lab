@@ -2,20 +2,54 @@
 
 enum class Nivel { BASICO, INTERMEDIARIO, DIFICIL }
 
-class Usuario
+data class Usuario(val nome: String, val idade: Int)
 
-data class ConteudoEducacional(var nome: String, val duracao: Int = 60)
+data class ConteudoEducacional(var nome: String, val duracao: Int = 60, var nivel: Nivel)
 
-data class Formacao(val nome: String, var conteudos: List<ConteudoEducacional>) {
+data class Formacao(private val nome: String, private val conteudos: List<ConteudoEducacional>) {
 
-    val inscritos = mutableListOf<Usuario>()
-    
+    private val inscritos = mutableListOf<Usuario>()
+
     fun matricular(usuario: Usuario) {
-        TODO("Utilize o parâmetro $usuario para simular uma matrícula (usar a lista de $inscritos).")
+        inscritos.add(usuario)
     }
+
+    fun usuariosMatriculados() {
+        for (inscrito in inscritos) {
+            print("Nome: ${inscrito.nome} - Idade: ${inscrito.idade}\n")
+        }
+    }
+
+    fun formacao() {
+        print("Formação ${nome}\n")
+    }
+
+    fun conteudos() {
+        for (conteudo in conteudos) {
+            print("${conteudo.nome} - ${conteudo.duracao}h: ${conteudo.nivel}\n")
+        }
+    }
+
 }
 
 fun main() {
-    TODO("Analise as classes modeladas para este domínio de aplicação e pense em formas de evoluí-las.")
-    TODO("Simule alguns cenários de teste. Para isso, crie alguns objetos usando as classes em questão.")
+
+    val listaConteudos = listOf(
+        ConteudoEducacional("Algoritmos", 80, Nivel.BASICO),
+        ConteudoEducacional("Cálculo", 80, Nivel.DIFICIL),
+        ConteudoEducacional("Lógica", 80, Nivel.INTERMEDIARIO),
+        ConteudoEducacional("Arquitetura de Computadores", nivel = Nivel.DIFICIL)
+    )
+
+    val formacao = Formacao("Engenharia de Software", listaConteudos)
+
+    formacao.matricular(Usuario("João", 30))
+
+    formacao.matricular(Usuario("Maria", 35))
+
+    formacao.formacao()
+    print("\nGrade:\n")
+    formacao.conteudos()
+    print("\nEstudantes Cadastrados:\n")
+    formacao.usuariosMatriculados()
 }
